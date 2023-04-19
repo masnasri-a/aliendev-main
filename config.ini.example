@@ -1,0 +1,3 @@
+[MONGODB]
+uri = mongodb://<username>:<password>@<ip>:<port>
+database = alienpdev
