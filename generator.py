@@ -47,7 +47,7 @@ with client:
             file.write(f'{includes}\n')
         file.write('if __name__ == "__main__":\n')
         file.write(
-            '\tuvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)')
+            '\tuvicorn.run("main:app", host="0.0.0.0", port=9100, reload=True)')
 
 # GENERATOR ROUTE
 client, db = mongo.connect()
