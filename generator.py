@@ -55,6 +55,7 @@ with client:
     details = db['gateway'].find()
     for detail in details:
         endpoints = detail.get('endpoint')
+        account_id = detail.get('account_id')
         stack_name: str = detail.get('stack_name')
         file_name = "source/route/"+stack_name.replace("-", "_")+".py"
         with open(file_name, 'w') as gen:
@@ -95,6 +96,7 @@ with client:
                 if method == "DELETE":
                     gen.write(f"@app.delete('/{stack_name}{prefix}')")
                 gen.write("\n")
+                
                 if data is [] or data is None:
                     gen.write("def test():\n")
                 else:
@@ -106,7 +108,7 @@ with client:
                             f"def endpoint(param:{convert_to_camelcase(prefix.replace('/',''))}):\n")
                         gen.write("\tparams = param.dict()\n")
                 gen.write(
-                    f'\tspec = importlib.util.spec_from_file_location("module.name", "source/handler/{stack_name.replace("-","_")}/{str(prefix).replace("/","")}.py")\n')
+                    f'\tspec = importlib.util.spec_from_file_location("module.name", "source/handler/{account_id}/{str(prefix).replace("/","")}.py")\n')
                 gen.write("\tmodule = importlib.util.module_from_spec(spec)\n")
                 gen.write("\tspec.loader.exec_module(module)\n")
                 gen.write("\tresult = module.handler(params)\n")

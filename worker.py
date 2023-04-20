@@ -1,4 +1,5 @@
 import pika
+import importlib
 import configparser
 import json
 import os
@@ -24,10 +25,14 @@ def consume(queue:str):
             data = json.loads(body.decode('utf-8'))
             print(data)
             folders = data.get("account_id")
-            if not os.path.exists("handler/"+folders):  # memeriksa apakah folder sudah ada
-                os.makedirs("handler/"+folders)
-            with open("handler/"+data.get("account_id")+"/"+data.get('file_name'), 'w') as file:
+            if not os.path.exists("source/handler/"+folders):  # memeriksa apakah folder sudah ada
+                os.makedirs("source/handler/"+folders)
+            with open("source/handler/"+data.get("account_id")+"/"+data.get('file_name'), 'w') as file:
                 file.write(data.get('data'))
+            spec = importlib.util.spec_from_file_location('generator', './generator.py')  # path/to/example.py harus diganti dengan path ke file Python yang ingin dijalankan
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            print("Created successfully")
     except KeyboardInterrupt:
         channel.stop_consuming()
         exit()
