@@ -115,3 +115,4 @@ with client:
                 gen.write("\treturn result\n")
                 gen.write("\n")
             gen.write("\n")
+print("Generate success")
