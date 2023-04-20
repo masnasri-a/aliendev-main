@@ -108,7 +108,7 @@ with client:
                             f"def endpoint(param:{convert_to_camelcase(prefix.replace('/',''))}):\n")
                         gen.write("\tparams = param.dict()\n")
                 gen.write(
-                    f'\tspec = importlib.util.spec_from_file_location("module.name", "source/handler/{account_id}/{str(prefix).replace("/","")}.py")\n')
+                    f'\tspec = importlib.util.spec_from_file_location("module.name", "source/handler/{account_id}/{str(prefix).replace("/","").replace("-","_")}.py")\n')
                 gen.write("\tmodule = importlib.util.module_from_spec(spec)\n")
                 gen.write("\tspec.loader.exec_module(module)\n")
                 gen.write("\tresult = module.handler(params)\n")
