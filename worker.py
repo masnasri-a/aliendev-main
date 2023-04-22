@@ -1,6 +1,7 @@
 import pika
 import importlib
 import configparser
+import generator
 import json
 import os
 
@@ -29,9 +30,7 @@ def consume(queue:str):
                 os.makedirs("source/handler/"+folders)
             with open("source/handler/"+data.get("account_id")+"/"+data.get('file_name'), 'w') as file:
                 file.write(data.get('data'))
-            spec = importlib.util.spec_from_file_location('generator', './generator.py')  # path/to/example.py harus diganti dengan path ke file Python yang ingin dijalankan
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
+            generator.runner()
             print("Created successfully")
     except KeyboardInterrupt:
         channel.stop_consuming()
